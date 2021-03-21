@@ -8,16 +8,18 @@ const slice = createSlice({
   name: 'user',
   initialState: {
     user: initialUser,
+    isLogged: false,
   },
   reducers: {
     loginSuccess: (state, action) => {
-      console.log(state, 'state', action.payload, 'PAYLOAD2222');
-      debugger;
+      debugger
       state.user = action.payload;
+      state.isLogged = true;
       localStorage.setItem('user', JSON.stringify(action.payload))
     },
     logoutSuccess: (state, action) =>  {
       state.user = null;
+      state.isLogged = false;
       localStorage.removeItem('user')
     },
   },

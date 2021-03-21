@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector } from 'react-redux';
 import Avatar from '@material-ui/core/Avatar';
 import {Box} from '@material-ui/core'
@@ -8,9 +8,9 @@ import Grid from '@material-ui/core/Grid';
 import EmojiEmotionsSharp from '@material-ui/icons/EmojiEmotionsSharp';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import {login} from '../../store/user.js'
+import {login} from '../store/user.js'
 
-import {Formik} from 'formik'
+import { useHistory } from "react-router-dom";
 import TextField from "@material-ui/core/TextField/TextField";
 import Button from "@material-ui/core/Button";
 
@@ -46,16 +46,35 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Login = () => {
+const Login = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { user } = useSelector(state => state.user);
+  const userData = useSelector(state => state);
+  const history = useHistory();
+  const [userName, setUserName] = useState('');
 
-  console.log(user, 'user');
-  // console.log(user, 'userProps');
+  console.log(userData, 'userData');
+  console.log(props, 'props');
+  //
   // useEffect(() => {
-  //   props.history.push('/dashboard')
-  // }, [user]);
+  //   if (userData.isLogged) {
+  //     history.push('/dashboard')
+  //   }
+  // }, [userData?.isLogged]);
+
+  useEffect(() => {
+    if (userData.user.isLogged) {
+      props.history.push('/dashboard')
+    }
+  }, [userData.user.isLogged])
+
+  const handleSubmit = () => {
+    dispatch(login({username: userName}))
+  };
+
+  const handleChange = (e) => {
+    setUserName(e.target.value)
+  };
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -69,34 +88,28 @@ const Login = () => {
           <Typography component="h1" variant="h5">
             Wybierz nazwę użytkownika
           </Typography>
-          <Formik
-            initialValues={{ username: '', password: '' }}
-            onSubmit={(values) => { dispatch(login(values)) }}
+          <form>
+            <Box mb={4}>
+              <TextField
+                id="name"
+                value={userName}
+                name="name"
+                label="Użytkownik"
+                fullWidth
+                onChange={handleChange}
+              />
+            </Box>
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={handleSubmit}
             >
-              {({ isSubmitting }) => (
-                <form onSubmit={() => {}}>
-                  <Box mb={4}>
-                    <TextField
-                      id="name"
-                      name="name"
-                      label="Użytkownik"
-                      fullWidth
-
-                    />
-                  </Box>
-                  <Button
-                    fullWidth
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                  >
-                    Rozpocznij
-                  </Button>
-                </form>
-              )}
-            </Formik>
-          {user.username}
+              Rozpocznij
+            </Button>
+          </form>
+          {userData.user.user.username || null}
         </div>
       </Grid>
     </Grid>

@@ -1,5 +1,5 @@
 import React from 'react';
-import Login from './features/login/Login';
+import Login from './views/Login';
 import './App.css';
 
 const TheGame = () =>  {
