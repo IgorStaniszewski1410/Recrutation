@@ -33,7 +33,7 @@ const TopBar = ({userData}) =>  {
           <Typography variant="h6" className={classes.title}>
             News
           </Typography>
-          <Button color="inherit">{userData.user.user.username || ''}</Button>
+          <Button color="inherit">{userData?.user.user.username || ''}</Button>
         </Toolbar>
       </AppBar>
     </div>

@@ -1,8 +1,8 @@
 import React, {useCallback, useState} from 'react';
 import TopBar from "../components/topBar";
 import {useSelector} from "react-redux";
-import SimpleCard from "../components/Card";
 import {questions} from '../data/questions'
+import FlippedCard from "../components/flippedCard/flippedCard";
 
 const Dashboard = () => {
   const userData = useSelector(state => state);
@@ -15,7 +15,7 @@ const Dashboard = () => {
   const renderCardWithQuestions = () => {
       return questions.map(item => {
         if (item.id === questionIndex) {
-          return <SimpleCard
+          return <FlippedCard
             goToNextQuestion={goToNextQuestion}
             goToPreviousQuestion={goToPreviousQuestion}
             card={item.id}

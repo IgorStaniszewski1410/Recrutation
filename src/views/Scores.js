@@ -5,7 +5,7 @@ const Scores = () => {
   return (
     <div>
       <TopBar />
-      Scores here
+        Scores here
     </div>
   )
 };
