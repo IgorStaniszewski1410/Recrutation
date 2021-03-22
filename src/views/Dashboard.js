@@ -5,6 +5,7 @@ import {questions} from '../data/questions'
 import FlippedCard from "../components/flippedCard/flippedCard";
 import { Formik, Field, Form } from 'formik';
 import {dispatchAnswer} from '../store/game.js'
+import Container from '@material-ui/core/Container';
 
 const Dashboard = () => {
   const storeData = useSelector(state => state);
@@ -16,7 +17,7 @@ const Dashboard = () => {
     return (
       <Formik
         initialValues={{
-          picked: '',
+          picked: "",
         }}
         onSubmit={async (values) => {
           await new Promise((r) => setTimeout(r, 10));
@@ -25,7 +26,7 @@ const Dashboard = () => {
       >
         {({ values }) => (
           <Form>
-              {answers.map(elem => {
+            {answers.map(elem => {
                 return (
                   <div role="group" aria-labelledby="my-radio-group">
                     <label>
@@ -33,7 +34,7 @@ const Dashboard = () => {
                     </label>
                   </div>
                 )
-              })}
+            })}
             <div>Wybrane: {values.picked}</div>
             <button type="submit">Submit</button>
           </Form>
@@ -52,7 +53,7 @@ const Dashboard = () => {
             questionIndex={questionIndex}
             question={item.question}
             renderContent={() => renderSection(item.correctIndex, item.answers)}
-            answers={item.answers}
+            answers={item.correctAnswer}
             correctIndex={item.correctIndex}
           />
         } else {
@@ -70,10 +71,10 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
+    <Container>
       <TopBar userData={storeData}/>
       {renderCardWithQuestions()}
-    </div>
+    </Container>
   )
 };
 

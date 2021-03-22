@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
 const TopBar = ({userData}) =>  {
   const classes = useStyles();
 
-  console.log(userData, 'inside');
   return (
     <div className={classes.root}>
       <AppBar position="static">

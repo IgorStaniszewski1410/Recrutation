@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './flippedCard.css'
 import Card from "@material-ui/core/Card/Card";
 import Typography from "@material-ui/core/Typography";
@@ -29,28 +29,31 @@ const FlippedCard = ({
   goToNextQuestion,
   goToPreviousQuestion,
   renderContent,
-  correctIndex
+  answers
 }) => {
   const classes = useStyles();
+  const [page, setFrontPage] = useState(1);
 
   const flipCard = () => {
     const element = document.getElementById('card');
-    console.log(element, 'element');
     if (element.className === 'cardSection') {
       if(element.style.transform === "rotateY(180deg)") {
+        setFrontPage(1);
         element.style.transform = "rotateY(0deg)";
       }
       else {
+        setFrontPage(2);
         element.style.transform = "rotateY(180deg)";
       }
     }
   };
 
+  console.log(page, 'page');
   return (
     <div className="container">
       <div id="card" className="cardSection">
         <Card className="front">
-          {questionIndex === card && (
+          {questionIndex === card && questionIndex < 6 ? (
             <>
               <Box mt={4}>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
@@ -60,18 +63,26 @@ const FlippedCard = ({
               <Box>
                 {renderContent()}
               </Box>
-              <div>
-                <Button size="small" onClick={goToNextQuestion}>Następne pytanie</Button>
-                <Button size="small" onClick={goToPreviousQuestion}>Poprzednie pytanie</Button>
-              </div>
             </>
-          )}
+          ) : <div>koniec gry, rozpocznij od nowa</div>}
         </Card>
         <div className="back">
-          <h1>This is the back</h1>
+          <h1>{questionIndex === card && answers}</h1>
         </div>
       </div>
-      <Button onClick={flipCard}>Pokaz odpowiedz</Button>
+      <div>
+        <Button size="small" onClick={goToNextQuestion}>Następne pytanie</Button>
+        <Button size="small" onClick={goToPreviousQuestion}>Poprzednie pytanie</Button>
+      </div>
+      {page === 2 ? (
+        <Button onClick={flipCard}>
+          Pokaz pytanie
+        </Button>
+      ) : <Button onClick={flipCard}>
+        Pokaz odpowiedz
+      </Button>}
+      <div>
+      </div>
     </div>
   )
 }
