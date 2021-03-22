@@ -10,7 +10,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import {login} from '../store/user.js'
 
-import { useHistory } from "react-router-dom";
 import TextField from "@material-ui/core/TextField/TextField";
 import Button from "@material-ui/core/Button";
 
@@ -37,36 +36,30 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
+    width: '200px', // Fix IE 11 issue.
+    marginTop: theme.spacing(2),
+    maxHeight: '90px',
+  },
+  label: {
+    maxHeight: '100px;'
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
 }));
 
-
 const Login = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const userData = useSelector(state => state);
-  const history = useHistory();
   const [userName, setUserName] = useState('');
 
-  console.log(userData, 'userData');
-  console.log(props, 'props');
-  //
-  // useEffect(() => {
-  //   if (userData.isLogged) {
-  //     history.push('/dashboard')
-  //   }
-  // }, [userData?.isLogged]);
-
   useEffect(() => {
-    if (userData.user.isLogged) {
+    if (userData?.user.isLogged) {
       props.history.push('/dashboard')
     }
-  }, [userData.user.isLogged])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userData?.user.isLogged]);
 
   const handleSubmit = () => {
     dispatch(login({username: userName}))
@@ -88,8 +81,8 @@ const Login = (props) => {
           <Typography component="h1" variant="h5">
             Wybierz nazwę użytkownika
           </Typography>
-          <form>
-            <Box mb={4}>
+          <form className={classes.form}>
+            <Box>
               <TextField
                 id="name"
                 value={userName}
@@ -109,7 +102,6 @@ const Login = (props) => {
               Rozpocznij
             </Button>
           </form>
-          {userData.user.user.username || null}
         </div>
       </Grid>
     </Grid>

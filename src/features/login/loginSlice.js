@@ -12,7 +12,6 @@ const slice = createSlice({
   },
   reducers: {
     loginSuccess: (state, action) => {
-      debugger
       state.user = action.payload;
       state.isLogged = true;
       localStorage.setItem('user', JSON.stringify(action.payload))

@@ -18,9 +18,9 @@ ReactDOM.render(
       <MuiThemeProvider>
         <Switch>
           <Provider store={store}>
-            <Route exact path="/login" component={Login}/>
-            <Route path="/dashboard" component={Dashboard}/>
-            <Route path="/scores" component={Scores}/>
+            <Route exact path="/" component={Login}/>
+            <Route exact path="/dashboard" component={Dashboard}/>
+            <Route exact path="/scores" component={Scores}/>
           </Provider>
         </Switch>
       </MuiThemeProvider>

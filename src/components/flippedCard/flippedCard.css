@@ -20,7 +20,7 @@ div {
     perspective: 1000px;
 }
 
-.card {
+#card {
     transition: transform 2s;
     transform-style: preserve-3d;
     cursor: pointer;
@@ -37,7 +37,6 @@ div {
 
 .front {
     border: 2px solid black;
-    background: url("http://placehold.it/250x250");
 }
 
 .front:hover {
@@ -48,7 +47,6 @@ div {
 
 .back {
     border: 2px solid black;
-    background: url("http://placehold.it/100x100");
     transform: rotateY(180deg);
 }
 

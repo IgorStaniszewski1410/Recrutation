@@ -1,15 +1,45 @@
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 import TopBar from "../components/topBar";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {questions} from '../data/questions'
 import FlippedCard from "../components/flippedCard/flippedCard";
+import { Formik, Field, Form } from 'formik';
+import {dispatchAnswer} from '../store/game.js'
 
 const Dashboard = () => {
-  const userData = useSelector(state => state);
-  const [questionIndex, nextQuestion] = useState(3);
+  const storeData = useSelector(state => state);
+  const [questionIndex, nextQuestion] = useState(1);
+  const dispatch = useDispatch();
 
-  const goToNextQuestion = () => {
-    nextQuestion(questionIndex + 1)
+  console.log(storeData, 'storeData');
+  const renderSection = (correctIndex, answers) => {
+    return (
+      <Formik
+        initialValues={{
+          picked: '',
+        }}
+        onSubmit={async (values) => {
+          await new Promise((r) => setTimeout(r, 10));
+          dispatch(dispatchAnswer({answer: values}))
+        }}
+      >
+        {({ values }) => (
+          <Form>
+              {answers.map(elem => {
+                return (
+                  <div role="group" aria-labelledby="my-radio-group">
+                    <label>
+                      <Field type="radio" name="picked" value={elem} /> {elem}
+                    </label>
+                  </div>
+                )
+              })}
+            <div>Wybrane: {values.picked}</div>
+            <button type="submit">Submit</button>
+          </Form>
+        )}
+      </Formik>
+    )
   };
 
   const renderCardWithQuestions = () => {
@@ -21,6 +51,9 @@ const Dashboard = () => {
             card={item.id}
             questionIndex={questionIndex}
             question={item.question}
+            renderContent={() => renderSection(item.correctIndex, item.answers)}
+            answers={item.answers}
+            correctIndex={item.correctIndex}
           />
         } else {
           return null;
@@ -32,9 +65,13 @@ const Dashboard = () => {
     nextQuestion(questionIndex - 1)
   };
 
+  const goToNextQuestion = () => {
+    nextQuestion(questionIndex + 1);
+  };
+
   return (
     <div>
-      <TopBar userData={userData}/>
+      <TopBar userData={storeData}/>
       {renderCardWithQuestions()}
     </div>
   )

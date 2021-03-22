@@ -1,10 +1,10 @@
 import React from 'react';
 import './flippedCard.css'
 import Card from "@material-ui/core/Card/Card";
-import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import CardActions from "@material-ui/core/CardActions/CardActions";
 import Button from "@material-ui/core/Button";
+import {Box} from "@material-ui/core";
+
 import {makeStyles} from "@material-ui/core";
 
 const useStyles = makeStyles({
@@ -14,11 +14,6 @@ const useStyles = makeStyles({
     padding: '25px',
     marginTop: '25px'
   },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
   title: {
     fontSize: 14,
   },
@@ -27,11 +22,21 @@ const useStyles = makeStyles({
   },
 });
 
-const FlippedCard = ({questionIndex, card, question, goToNextQuestion, goToPreviousQuestion}) => {
+const FlippedCard = ({
+  questionIndex,
+  card,
+  question,
+  goToNextQuestion,
+  goToPreviousQuestion,
+  renderContent,
+  correctIndex
+}) => {
   const classes = useStyles();
-  const flipCard = (event) => {
-    const element = event.currentTarget;
-    if (element.className === "card") {
+
+  const flipCard = () => {
+    const element = document.getElementById('card');
+    console.log(element, 'element');
+    if (element.className === 'cardSection') {
       if(element.style.transform === "rotateY(180deg)") {
         element.style.transform = "rotateY(0deg)";
       }
@@ -42,30 +47,31 @@ const FlippedCard = ({questionIndex, card, question, goToNextQuestion, goToPrevi
   };
 
   return (
-    <div>
-      <div className="container">
-        <div className="card">
-          <Card className="front">
-            {questionIndex === card && (
+    <div className="container">
+      <div id="card" className="cardSection">
+        <Card className="front">
+          {questionIndex === card && (
+            <>
+              <Box mt={4}>
+                <Typography className={classes.title} color="textSecondary" gutterBottom>
+                  {question}
+                </Typography>
+              </Box>
+              <Box>
+                {renderContent()}
+              </Box>
               <div>
-                <CardContent>
-                  <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    {question}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small" onClick={goToNextQuestion}>Następne pytanie</Button>
-                  <Button size="small" onClick={goToPreviousQuestion}>Poprzednie pytanie</Button>
-                  <Button size="small" onClick={flipCard}>Pokaz odpowiedz</Button>
-                </CardActions>
+                <Button size="small" onClick={goToNextQuestion}>Następne pytanie</Button>
+                <Button size="small" onClick={goToPreviousQuestion}>Poprzednie pytanie</Button>
               </div>
-            )}
-          </Card>
-          <div className="back">
-            <h1>This is the back</h1>
-          </div>
+            </>
+          )}
+        </Card>
+        <div className="back">
+          <h1>This is the back</h1>
         </div>
       </div>
+      <Button onClick={flipCard}>Pokaz odpowiedz</Button>
     </div>
   )
 }
