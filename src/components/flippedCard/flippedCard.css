@@ -33,10 +33,12 @@ div {
     justify-content: center;
     align-items: center;
     backface-visibility: hidden;
+    text-align: center;
 }
 
 .front {
     border: 2px solid black;
+    text-align: left;
 }
 
 .front:hover {

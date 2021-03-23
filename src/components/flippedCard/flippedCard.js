@@ -15,7 +15,9 @@ const useStyles = makeStyles({
     marginTop: '25px'
   },
   title: {
-    fontSize: 14,
+    textAlign: 'center',
+    fontSize: '23px',
+    color: '#3f51b5',
   },
   pos: {
     marginBottom: 12,
@@ -48,14 +50,13 @@ const FlippedCard = ({
     }
   };
 
-  console.log(page, 'page');
   return (
     <div className="container">
       <div id="card" className="cardSection">
         <Card className="front">
           {questionIndex === card && questionIndex < 6 ? (
             <>
-              <Box mt={4}>
+              <Box mt={4} display="flex" alignItems="center" justifyContent="center">
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
                   {question}
                 </Typography>
@@ -70,18 +71,20 @@ const FlippedCard = ({
           <h1>{questionIndex === card && answers}</h1>
         </div>
       </div>
-      <div>
-        <Button size="small" onClick={goToNextQuestion}>Następne pytanie</Button>
-        <Button size="small" onClick={goToPreviousQuestion}>Poprzednie pytanie</Button>
-      </div>
-      {page === 2 ? (
-        <Button onClick={flipCard}>
-          Pokaz pytanie
-        </Button>
-      ) : <Button onClick={flipCard}>
-        Pokaz odpowiedz
-      </Button>}
-      <div>
+      <Box display="flex" justifyContent="space-between" height="60px" mt={2}>
+        <Button variant="outlined" color="primary" onClick={goToNextQuestion}>Następne pytanie></Button>
+        <Button variant="outlined" color="primary" onClick={goToPreviousQuestion}>Poprzednie pytanie></Button>
+      </Box>
+        <Box mt={2}>
+          {page === 2 ? (
+            <Button variant="contained" color="primary" onClick={flipCard}>
+              Pokaz pytanie
+            </Button>
+          ) : <Button variant="contained" color="primary" onClick={flipCard}>
+            Pokaz odpowiedz
+          </Button>}
+        </Box>
+        <div>
       </div>
     </div>
   )

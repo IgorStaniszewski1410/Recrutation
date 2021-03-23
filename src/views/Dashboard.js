@@ -5,14 +5,13 @@ import {questions} from '../data/questions'
 import FlippedCard from "../components/flippedCard/flippedCard";
 import { Formik, Field, Form } from 'formik';
 import {dispatchAnswer} from '../store/game.js'
-import Container from '@material-ui/core/Container';
+import {Box, Button} from '@material-ui/core';
 
 const Dashboard = () => {
   const storeData = useSelector(state => state);
   const [questionIndex, nextQuestion] = useState(1);
   const dispatch = useDispatch();
 
-  console.log(storeData, 'storeData');
   const renderSection = (correctIndex, answers) => {
     return (
       <Formik
@@ -26,17 +25,19 @@ const Dashboard = () => {
       >
         {({ values }) => (
           <Form>
-            {answers.map(elem => {
+            <Box display="grid" alignItems="center" justifyContent="center" mt={-11}>
+              {answers.map(elem => {
                 return (
-                  <div role="group" aria-labelledby="my-radio-group">
+                  <Box mt={4} display="block" alignItems="center" justifyContent="center" width={1}>
                     <label>
-                      <Field type="radio" name="picked" value={elem} /> {elem}
+                      <Field type="radio" name="picked" value={elem} />
+                      <span>{elem}</span>
                     </label>
-                  </div>
+                  </Box>
                 )
-            })}
-            <div>Wybrane: {values.picked}</div>
-            <button type="submit">Submit</button>
+              })}
+            </Box>
+            <Box ml={2} mt={4}>Wybrane: {values.picked}</Box>
           </Form>
         )}
       </Formik>
@@ -71,10 +72,23 @@ const Dashboard = () => {
   };
 
   return (
-    <Container>
+    <div>
       <TopBar userData={storeData}/>
-      {renderCardWithQuestions()}
-    </Container>
+      <Box
+        display="flex"
+        mt={10}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <h1>Witaj {storeData?.user.user.username || ''}</h1>
+      </Box>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        {renderCardWithQuestions()}</Box>
+    </div>
   )
 };
 
