@@ -39,7 +39,6 @@ const FlippedCard = ({
   const storeData = useSelector(state => state);
   const [page, setFrontPage] = useState(1);
 
-  console.log(storeData.game.scores, 'storeDatamdmmd');
   const flipCard = () => {
     const element = document.getElementById('card');
     if (element.className === 'cardSection') {
