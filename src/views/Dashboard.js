@@ -12,6 +12,7 @@ const Dashboard = () => {
   const [questionIndex, nextQuestion] = useState(1);
   const dispatch = useDispatch();
 
+  console.log(storeData, 'storeData');
   const renderSection = (correctIndex, answers) => {
     return (
       <Formik
@@ -36,6 +37,9 @@ const Dashboard = () => {
                   </Box>
                 )
               })}
+              <Button variant="outlined" color="primary" type="submit" size="small">
+                Wybierz odpowiedz
+              </Button>
             </Box>
             <Box ml={2} mt={4}>Wybrane: {values.picked}</Box>
           </Form>
@@ -56,6 +60,7 @@ const Dashboard = () => {
             renderContent={() => renderSection(item.correctIndex, item.answers)}
             answers={item.correctAnswer}
             correctIndex={item.correctIndex}
+            setPageIndex={nextQuestion}
           />
         } else {
           return null;

@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import {Box} from "@material-ui/core";
 
 import {makeStyles} from "@material-ui/core";
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles({
   root: {
@@ -31,11 +32,14 @@ const FlippedCard = ({
   goToNextQuestion,
   goToPreviousQuestion,
   renderContent,
-  answers
+  answers,
+  setPageIndex
 }) => {
   const classes = useStyles();
+  const storeData = useSelector(state => state);
   const [page, setFrontPage] = useState(1);
 
+  console.log(storeData.game.scores, 'storeDatamdmmd');
   const flipCard = () => {
     const element = document.getElementById('card');
     if (element.className === 'cardSection') {
@@ -50,11 +54,21 @@ const FlippedCard = ({
     }
   };
 
+  const showAnswers = () => {
+    return storeData.game.scores.map(item => {
+      return (
+        <ul>
+          <li>{item.picked}</li>
+        </ul>
+      )
+    })
+  }
+  const isGameFinished = questionIndex === card && questionIndex < 5
   return (
     <div className="container">
       <div id="card" className="cardSection">
         <Card className="front">
-          {questionIndex === card && questionIndex < 6 ? (
+          {questionIndex === card && questionIndex < 5 ? (
             <>
               <Box mt={4} display="flex" alignItems="center" justifyContent="center">
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
@@ -65,16 +79,32 @@ const FlippedCard = ({
                 {renderContent()}
               </Box>
             </>
-          ) : <div>koniec gry, rozpocznij od nowa</div>}
+          ) : <Box>
+            <Box display="flex" alignItems="center" justifyContent="center">
+              <Box ml={2}>
+                <h3>Koniec gry, rozpocznij od nowa</h3>
+                <Button variant="contained" color="primary" onClick={() => setPageIndex(1)}>
+                  Nowa gra
+                </Button>
+                <Box>
+                  <h3>Wybrane odpowiedzi:</h3>
+                  <span>{showAnswers()}</span>
+                </Box>
+              </Box>
+            </Box>
+          </Box>}
         </Card>
         <div className="back">
           <h1>{questionIndex === card && answers}</h1>
         </div>
       </div>
-      <Box display="flex" justifyContent="space-between" height="60px" mt={2}>
-        <Button variant="outlined" color="primary" onClick={goToNextQuestion}>Następne pytanie></Button>
-        <Button variant="outlined" color="primary" onClick={goToPreviousQuestion}>Poprzednie pytanie></Button>
-      </Box>
+      {isGameFinished ? (
+        <Box display="flex" justifyContent="space-between" height="60px" mt={2}>
+          <Button variant="outlined" color="primary" onClick={goToNextQuestion}>Następne pytanie></Button>
+          <Button variant="outlined" color="primary" onClick={goToPreviousQuestion}>Poprzednie pytanie></Button>
+        </Box>
+      ) : null}
+      {isGameFinished ? (
         <Box mt={2}>
           {page === 2 ? (
             <Button variant="contained" color="primary" onClick={flipCard}>
@@ -84,6 +114,7 @@ const FlippedCard = ({
             Pokaz odpowiedz
           </Button>}
         </Box>
+      ) : null}
         <div>
       </div>
     </div>

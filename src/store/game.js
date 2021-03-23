@@ -33,7 +33,6 @@ export default scores.reducer
 const { passQuestionAnswerSuccess } = scores.actions;
 
 export const dispatchAnswer = ({ answer }) => async dispatch => {
-  console.log(answer, 'dkajlwndlkj');
   try {
     dispatch(passQuestionAnswerSuccess(answer));
   } catch (e) {
