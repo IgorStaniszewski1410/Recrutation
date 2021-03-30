@@ -12,25 +12,27 @@ const scores = createSlice({
       state.isGameFinished = false;
       localStorage.setItem('scores', JSON.stringify(action.payload))
     },
-    passQuestionAnswer: (state, action) =>  {
-      state.isGameFinished = false;
-    },
     passQuestionAnswerSuccess: (state, action) =>  {
       return {
         ...state.scores,
         scores: [...state.scores, action.payload]
       }
     },
-    endGame: (state, action) =>  {
-      state.scores = action.payload;
+    endGameSuccess: (state) =>  {
       state.isGameFinished = true;
     },
+    resetScoresSuccess: (state) => {
+      return {
+        ...state.scores,
+        scores: []
+      }
+    }
   },
 });
 
 export default scores.reducer
 
-const { passQuestionAnswerSuccess } = scores.actions;
+const { passQuestionAnswerSuccess, endGameSuccess, resetScoresSuccess } = scores.actions;
 
 export const dispatchAnswer = ({ answer }) => async dispatch => {
   try {
@@ -39,3 +41,20 @@ export const dispatchAnswer = ({ answer }) => async dispatch => {
     return console.error(e.message);
   }
 };
+
+export const endGame = ({ isGameFinished }) => async dispatch => {
+  try {
+    dispatch(endGameSuccess(isGameFinished));
+  } catch (e) {
+    return console.error(e.message);
+  }
+};
+
+export const resetScores = () => async dispatch => {
+  try {
+    dispatch(resetScoresSuccess());
+  } catch (e) {
+    return console.error(e.message);
+  }
+};
+

@@ -1,50 +1,45 @@
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import TopBar from "../components/topBar";
 import {useDispatch, useSelector} from "react-redux";
 import {questions} from '../data/questions'
 import FlippedCard from "../components/flippedCard/flippedCard";
-import { Formik, Field, Form } from 'formik';
 import {dispatchAnswer} from '../store/game.js'
-import {Box, Button} from '@material-ui/core';
+import {Box} from '@material-ui/core';
 
 const Dashboard = () => {
   const storeData = useSelector(state => state);
   const [questionIndex, nextQuestion] = useState(1);
+  const [answer, setRadioId] = useState({});
   const dispatch = useDispatch();
 
-  console.log(storeData, 'storeData');
+  const handleChangeRadio = useCallback((id, correctIndex) => {
+    setRadioId({
+      selectedAnswer: id,
+      correctIndex: correctIndex
+    })
+  }, []);
+
   const renderSection = (correctIndex, answers) => {
     return (
-      <Formik
-        initialValues={{
-          picked: "",
-        }}
-        onSubmit={async (values) => {
-          await new Promise((r) => setTimeout(r, 10));
-          dispatch(dispatchAnswer({answer: values}))
-        }}
-      >
-        {({ values }) => (
-          <Form>
-            <Box display="grid" alignItems="center" justifyContent="center" mt={-11}>
-              {answers.map(elem => {
-                return (
-                  <Box mt={4} display="block" alignItems="center" justifyContent="center" width={1}>
-                    <label>
-                      <Field type="radio" name="picked" value={elem} />
-                      <span>{elem}</span>
-                    </label>
-                  </Box>
-                )
-              })}
-              <Button variant="outlined" color="primary" type="submit" size="small">
-                Wybierz odpowiedz
-              </Button>
-            </Box>
-            <Box ml={2} mt={4}>Wybrane: {values.picked}</Box>
-          </Form>
-        )}
-      </Formik>
+      <form>
+        <Box display="grid" alignItems="center" justifyContent="center" mt={-11}>
+          {answers.map(elem => {
+            return (
+              <Box mt={4} display="block" alignItems="center" justifyContent="center" width={1}>
+                <label>
+                  <input
+                    type="radio"
+                    name="picked"
+                    checked={answer.selectedAnswer === elem.id}
+                    onChange={() => handleChangeRadio(elem.id, correctIndex)}
+                  />
+                  <span>{elem.value}</span>
+                </label>
+              </Box>
+            )
+          })}
+        </Box>
+      </form>
     )
   };
 
@@ -61,6 +56,7 @@ const Dashboard = () => {
             answers={item.correctAnswer}
             correctIndex={item.correctIndex}
             setPageIndex={nextQuestion}
+            isDisabled={answer.hasOwnProperty('selectedAnswer')}
           />
         } else {
           return null;
@@ -73,6 +69,8 @@ const Dashboard = () => {
   };
 
   const goToNextQuestion = () => {
+    dispatch(dispatchAnswer({answer: answer, question: questionIndex + 1}));
+    setRadioId({});
     nextQuestion(questionIndex + 1);
   };
 
@@ -85,7 +83,7 @@ const Dashboard = () => {
         alignItems="center"
         justifyContent="center"
       >
-        <h1>Witaj {storeData?.user.user.username || ''}</h1>
+        <h1>Welcome {storeData?.user.user.username || ''}</h1>
       </Box>
       <Box
         display="flex"

@@ -41,19 +41,7 @@ div {
     text-align: left;
 }
 
-.front:hover {
-    bottom: 2px;
-    left: 2px;
-    box-shadow: 0px 0px 20px 1px #000;
-}
-
 .back {
     border: 2px solid black;
     transform: rotateY(180deg);
-}
-
-.back:hover {
-    bottom: 2px;
-    right: 2px;
-    box-shadow: 0px 0px 20px 1px #000;
 }
